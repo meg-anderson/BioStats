@@ -1,0 +1,122 @@
+---
+title: 'Homework #1'
+author: "M. Drew LaMar"
+date: "Due: Wednesday, September 12, 2018, 1:00 pm"
+output:
+  word_document: default
+  html_document:
+    toc: yes
+    toc_depth: 3
+---
+
+## Chapter 1
+
+### Chapter 1: #14
+
+ (a) Answer to (a)
+ (b) Answer to (b)
+ (c) Answer to (c)
+
+### Chapter 1: #16
+
+### Chapter 1: #17
+
+### Chapter 1: #18
+
+### Chapter 1: #19
+
+### Chapter 1: #20
+
+### Chapter 1: #24
+
+---
+
+## Chapter 2
+
+### Chapter 2: Practice Problem #12 (example - please delete me!)
+
+ (a) What type of table is this?
+ 
+Contingency table
+ 
+ (b) Display these same data in a mosaic plot.
+ 
+First, let's read in the data and take a quick peek.
+ 
+```{r}
+mydata <- read.csv("http://whitlockschluter.zoology.ubc.ca/wp-content/data/chapter02/chap02q12ConvictionsAndIncome.csv")
+head(mydata)
+str(mydata)
+```
+First question to ask yourself is:  **What are the variables and their types?**  It looks like we have two categorical variables: `hasConvictions`, with levels `yes` and `no`, and `incomeLevel`, with levels `comfortable`, `adequate` and `inadequate`.
+
+Second question to ask yourself is:  **Is the data in processed or raw form?**  In other words, *are rows objects from a population, and are columns variables/measurements on those objects?*  In this case, it appears not.  It looks like someone already computed the frequencies of occurrences of the different categorical variables.  Since we know we want to do a mosaic plot, we need to make sure the data is in the right form to send to the function `mosaicplot`.  The [Chapter 2 R-Code Examples](http://rstudio-pubs-static.s3.amazonaws.com/150233_15c3dbafd8f34216901bded8d8e299d0.html#example-2.3a.-bird-malaria) show us that we need to have the data in **contingency table form**.  *This is one of our first examples of why you need to learn how to change the form of your data!!!*  Let the data munging begin!!!
+
+In this case, we'll just do this manually and learn some more sophisticated tools later in the course.  Since you've learned about the `matrix` data type, let's use that (a matrix is another form of a table).  We'll put `hasConvictions` as rows and `incomeLevel` as the columns:
+
+```{r}
+(mytable <- matrix(mydata$frequency, byrow = TRUE, nrow = 2))
+```
+Looks good, except names for rows and columns would be good.  **Make sure you name them in the correct order!!!**
+```{r}
+rownames(mytable) <- c("yes", "no")
+colnames(mytable) <- c("comfortable", "adequate", "inadequate")
+mytable
+```
+Now just in case you like to have `incomeLevel` increasing from left to right, we can reorder the columns.  Note that while `1:3` creates a vector (`r 1:3`), we can also count backwards with the command `3:1`, giving (`r 3:1`).
+```{r}
+(mytable <- mytable[,3:1])
+```
+That's better!  Now, our mosaicplot - we'll need to transpose the matrix to make sure the explanatory variable (`incomeLevel`) is along the horizontal axis.
+```{r}
+mosaicplot(t(mytable), 
+           xlab = "Income Level",
+           ylab = "Convictions",
+           main = "")
+```
+
+Yay!!!
+
+ (c) Categorical (ordered). Groups should be
+arranged by increasing income.
+ 
+ (d) The relative frequency of convictions decreases as available income increases.
+ 
+ (e) The mosaic plot, which made it easier to see the pattern. Whereas the table gives the frequencies, the graph visualizes the association between the variables.
+ 
+### Chapter 2: #20
+
+### Chapter 2: #23
+
+### Chapter 2: #29
+
+### Chapter 2: #32
+
+### Chapter 2: #33
+
+### Chapter 2: #34
+
+### Chapter 2: #35
+
+### Chapter 2: #36
+
+## More examples of R-Markdown awesomeness (please delete me!)
+
+This is regular text.  You can even do math!!!  This is **bold**.
+
+$$
+a^2 + b^2 = c^2
+$$
+
+Use a single dollar sign to do math "inline", like so:  $\alpha = \beta$.
+
+> This is a blockquote to your teaching assistants.  Use this to leave them a specific comment about your work (for example, "I'm having trouble with this.  Feedback appreciated.")
+
+Here's an example of embedded R code:
+
+```{r}
+x <- 4
+(y <- x + 2)
+```
+
+You can even embed R code "inline", like math.  So, for example, I can say y = `r y`, or even embed it into math:  $y = `r y`$.  If I change the code in the R chunk above, it will modify the text accordingly.
